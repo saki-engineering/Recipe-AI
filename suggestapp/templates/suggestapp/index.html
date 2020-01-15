@@ -1,0 +1,177 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>変わる世界、変わらない私：献立提案AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    integrity="sha256-OweaP/Ic6rsV+lysfyS4h+LM6sRwuO3euTYfr6M124g=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+    crossorigin="anonymous">
+  <link href="{% static 'suggestapp/css/style.css' %}" media="all" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <nav class="title-nav u-mb20">
+    <div class="nav-wrapper">
+      <a class="brand-logo center">献立提案AI</a>
+      <ul class="right hide-on-med-and-down">
+        <li>
+          <a href="http://app.mayfes2018-utatane.com/" target=”_blank”>sharé futuré</a>
+        </li>
+        <li>
+          <!-- <a href="https://gogatsusai.jp/91/mfa/id/489" target=”_blank”>投票する</a> -->
+        </li>
+      </ul>
+      <ul id="slide-out" class="side-nav">
+        <li>
+          <a href="http://app.mayfes2018-utatane.com/" target=”_blank”>sharé futuré</a>
+        </li>
+        <li>
+          <!-- <a href="https://gogatsusai.jp/91/mfa/id/489" target=”_blank”>投票する</a> -->
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="sub-title u-mb20" id="question"> オススメレシピ、探します！</div>
+    <!--ドロップダウンでの確認 -->
+    <div class="row u-mb2" id="MenuReview">
+      <div class="col s1 u-mb20">
+        <div class="dropdown float-right">
+          <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            回答の確認
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownAnswerContents">
+            <ul id="dropList">
+            </ul>
+            <!-- ここに回答したもののhtmlが書き込まれていく。戻った場合は削除　-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="asheet">
+      <!-- ここに各質問ごとのフォーマットを記載する。それが変更できるようにJSで裏から操作-->
+      <!-- (0) ボタン-->
+      <div class="buttons" id="asheet1" style="display:none;">
+        <div class="row u-mb20">
+          <div class="col-md-3 col-sm-2 col-xs-1 u-mb20">
+
+          </div>
+          <div class="col-md-6 col-sm-8 col-xs-10 center u-mb20">
+            <button id="ansButton0" onclick="nextButton(0)" class="waves-effect waves-light btn-large answer-button js-aircon-on">1</button>
+          </div>
+          <div class="col-md-3 col-sm-2 col-xs-1 left u-mb20">
+
+          </div>
+        </div>
+        <div class="row u-mb20">
+          <div class="col-md-3 col-sm-2 col-xs-1 u-mb20">
+
+          </div>
+          <div class="col-md-6 col-sm-8 col-xs-10 center u-mb20">
+            <button id="ansButton1" onclick="nextButton(1)" class="waves-effect waves-light btn-large answer-button js-aircon-off">2</button>
+          </div>
+          <div class="col-md-3 col-sm-2 col-xs-1 left u-mb20">
+
+          </div>
+        </div>
+        <div class="row u-mb20">
+          <div class="col-md-3 col-sm-2 col-xs-1 u-mb20">
+
+          </div>
+          <div class="col-md-6 col-sm-8 col-xs-10 center u-mb20">
+            <button id="ansButton2" onclick="nextButton(2)" class="waves-effect waves-light btn-large answer-button js-aircon-off">3</button>
+          </div>
+          <div class="col-md-3 col-sm-2 col-xs-1 left u-mb20">
+
+          </div>
+        </div>
+        <div class="row u-mb20">
+          <div class="col-md-3 col-sm-2 col-xs-1 u-mb20">
+
+          </div>
+          <div class="col-md-6 col-sm-8 col-xs-10 center u-mb20">
+            <button id="ansButton3" onclick="nextButton(3)" class="waves-effect waves-light btn-large answer-button js-aircon-off">4</button>
+          </div>
+          <div class="col-md-3 col-sm-2 col-xs-1 left u-mb20">
+
+          </div>
+        </div>
+        <div class="row u-mb20">
+          <div class="col-md-3 col-sm-2 col-xs-1 u-mb20">
+
+          </div>
+          <div class="col-md-6 col-sm-8 col-xs-10 center u-mb20">
+            <button id="ansButton4" onclick="nextButton(4)" class="waves-effect waves-light btn-large answer-button js-aircon-off">5</button>
+          </div>
+          <div class="col-md-3 col-sm-2 col-xs-1 left u-mb20">
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- レシピ提案 フェーズ　-->
+    <div id="suggest-sheet" style="display:none">
+      <div class="col s12 center u-mb20">
+        <h3 id="recipe-title"> レシピ選定中...　</h3>
+        <figure>
+          <img id="recipe-img" class="img-responsive center-block" src="iconUTaTane.png" alt="レシピ画像" title="recipe-img" />
+          <figcaption>出典：<a id="recipe-imageref">UTaTané</a></figcaption>
+        </figure>
+      </div>
+      <div class="col s12 center u-mb20">
+        <a id="recipe-ref" rel="external" style="display:none">レシピはこちら！</a>
+      </div>
+    </div>
+    <!-- 戻る・進む：ページ遷移ボタン-->
+    <div class="row u-mb20 pageChange">
+      <!--<div class="col center u-mb20">-->
+        <div class="col-lg-3 col-md-3 col-sm-2 col-xs-1 center u-mb20">
+          <h3> </h3>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-10 center u-mb20">
+          <button id="playButton" onclick="nextButton(-1)" class="waves-effect waves-light btn-large pageChange-button">Let's
+            Play!</button>
+          <button id="backButton" onclick="backButton()" class="waves-effect waves-light btn-large pageChange-button"
+              style="display:none">戻る</button>
+        </div>
+      <!--  <div class="col-lg-6 col-md-6 col-sm-8 col-xs-10 center u-mb20">
+          <button id="backButton" onclick="backButton()" class="waves-effect waves-light btn-large pageChange-button"
+            style="display:none">戻る</button>
+        </div>-->
+        <div class="col-lg-3 col-md-3 col-sm-2 col-xs-1 center u-mb20">
+          <h3> </h3>
+        </div>
+    <!--  </div>-->
+      <!--  <div class="col s12 center u-mb20">
+                <button id="nextButton" onclick="nextButton(0)" class="waves-effect waves-light btn-large pageChange-button" style="display:none">決定</button>
+            </div> -->
+    </div>
+
+    <footer>
+      <hr>
+      <p>
+        本サービスは，「20年後の未来の生活を描く」という構想的・学術的な目的で小規模に提供しているものです。
+        提供にあたっては <a href="https://www.orangepage.net/" rel="external">オレンジページnet</a> 様のレシピおよび写真を引用しています。
+      </p>
+    </footer>
+
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" integrity="sha256-U/cHDMTIHCeMcvehBv1xQ052bPSbJtbuiw4QA9cTKz0="
+    crossorigin="anonymous"></script>
+  <script type='text/javascript' src="{% static 'suggestapp/js/index.js' %}"></script>
+
+</html>
