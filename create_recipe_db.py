@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup as bs
 MAX_DATA_SIZE = 1000
 BASE_URL = 'https://www.orangepage.net/recipes/detail_'
 
-for id in range(115035,115055):
+for id in range(116900,117000):
     #実行の進捗状況がわかるようにfor文イテレータをターミナル出力
     if id%10 == 0:
         print(id)
@@ -31,6 +31,7 @@ for id in range(115035,115055):
     calory_info → 配列で[総カロリー,　人数]と抽出される
     calory →　per personに処理
     """
+    calory = 300
     calory_info = re.findall('\d+', bsObj.find("span", itemprop="calories").text)
     calory = int(calory_info[0])
     if len(calory_info) > 1:
@@ -42,6 +43,7 @@ for id in range(115035,115055):
     salt_info → 配列で[総塩分量,　人数]と抽出される
     salt →　per personに処理
     """
+    salt = 1.0
     salt_contents = bsObj.find("ul", class_="subInfo").contents
     for tag in salt_contents:
         if 'Salt' in str(tag):
