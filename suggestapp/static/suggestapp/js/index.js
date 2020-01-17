@@ -330,30 +330,38 @@ async function nextButton(ans_num) {
         100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
         100, 100, 100, 100, 100, 100, 100, 100, 100, 40
       ];
-      const server_url = new URL(`${location.protocol}//${location.hostname}/api`);
-      for (const a of out_vector) server_url.searchParams.append("a", a);
-      for (const b of stocks) server_url.searchParams.append("b", b);
-      const errmes = "サーバーAIとの通信に失敗しました……\n通信状況が悪いか，またはAIの調子が悪いかもしれません。\nしばらく待ってから再度お試しください。";
-      const res = await fetch(server_url, { mode: "cors" }).catch(e => alert(errmes));
-      if (!res.ok) alert(errmes);
-      const menu = await res.json();
-      if ("error" in menu) alert(errmes);
 
-      // 表示
-      if (menu.menuid < 0) {
-        alert("AIが適切な献立を見つけられませんでした……！\nお役に立てず，申し訳ありません。");
+      var request_param = 0;
+      for(var i=0; i<OUTVEC_DIM; i++){
+        request_param = request_param * 10 + out_vector[i];
       }
-      else {
-        document.getElementById('recipe-title').innerText = menu.name;
-        document.getElementById('recipe-img').src = menu.imageurl;
-        const recipe_ref = document.getElementById('recipe-ref');
-        recipe_ref.href = menu.url;
-        recipe_ref.style.display = "inline";
-        const recipe_imageref = document.getElementById('recipe-imageref');
-        recipe_imageref.href = menu.url;
-        recipe_imageref.rel = "external";
-        recipe_imageref.innerText = menu.url;
-      }
+      const server_url = location.href + "search/" + request_param;
+
+      const errmes = "サーバーAIとの通信に失敗しました……\n通信状況が悪いか，またはAIの調子が悪いかもしれません。\nしばらく待ってから再度お試しください。";
+      $.ajax({
+        url: server_url,
+        type: "GET",
+        dataType: 'json'
+      }) 
+      .done(function(data, textStatus, jqXHR){  //data, success, 200
+        if(data.title==null){
+          alert("AIが適切な献立を見つけられませんでした……！\nお役に立てず，申し訳ありません。");
+        }
+        else{
+          document.getElementById('recipe-title').innerText = data.title;
+          //document.getElementById('recipe-img').src = menu.imageurl; //これまだ
+          const recipe_url = "https://www.orangepage.net/recipes/detail_" + data.url_id;
+          const recipe_ref = document.getElementById('recipe-ref');
+          recipe_ref.href = recipe_url;
+          recipe_ref.style.display = "inline";
+          const recipe_imageref = document.getElementById('recipe-imageref');
+          recipe_imageref.href = recipe_url;
+          recipe_imageref.rel = "external";
+          recipe_imageref.innerText = recipe_url;
+        }
+      }).fail(function(jqXHR, textStatus, errorThrown){
+        alert(errmes);
+      });
     }
   }
   q_number = next_q_number;
