@@ -18,10 +18,12 @@ def search(request, param):
         user_ans[i] = param % 10
         param = (param - user_ans[i])//10
 
+    #正規化定数の定義
     NORMALIZE_STEP = 0.2
     NORMALIZE_CALORY = 0.2
     NORMALIZE_SALT = 0.2
 
+    #ユーザー回答ベクトルとレシピベクトルの内積が一定値thresを超えたものの中からランダムにサジェスト献立を選定
     user_vector = np.array([user_ans[1] * NORMALIZE_STEP, user_ans[2] * NORMALIZE_CALORY, user_ans[3] * NORMALIZE_SALT], dtype=float)
     recipes = Recipe.objects.all()
     candicates = []
@@ -31,6 +33,7 @@ def search(request, param):
         if np.dot(user_vector, menu_vector) >= thres:
             candicates.append(recipe)
 
+    #recipes[index]がサジェストする献立
     index = math.ceil(random.random() * len(candicates))
 
     #画面に表示する料理画像のurlを取得
