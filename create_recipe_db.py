@@ -4,10 +4,14 @@ import requests
 import re
 from bs4 import BeautifulSoup as bs
 
-MAX_DATA_SIZE = 200000
+MAX_DATA_SIZE = 1000
 BASE_URL = 'https://www.orangepage.net/recipes/detail_'
 
-for id in range(MAX_DATA_SIZE):
+for id in range(115035,115055):
+    #実行の進捗状況がわかるようにfor文イテレータをターミナル出力
+    if id%10 == 0:
+        print(id)
+
     #指定urlにGETリクエストを送信、ステータスコードが200の場合はhtmlを取得
     url = BASE_URL + str(id)
     res = requests.get(url, allow_redirects=False)
@@ -52,5 +56,5 @@ for id in range(MAX_DATA_SIZE):
     print('{:.2f}'.format(calory))
     print('{:.2f}'.format(salt))
     """
-
-    print("insert into suggestapp_recipe(title, url_id, step, calory, salt) values('{}',{},{},{:.2f},{:.2f});".format(title, id, step, calory, salt))
+    with open('create_recipe_db.sql', 'a') as f:
+        print("insert into suggestapp_recipe(title, url_id, step, calory, salt) values('{}',{},{},{:.2f},{:.2f});".format(title, id, step, calory, salt), file=f)
