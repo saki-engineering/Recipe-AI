@@ -314,7 +314,7 @@ async function nextButton(ans_num) {
       }
     }
     //next_q_numberがQ_NUM_INFの時：質問から回答フェーズに移行．
-    //queryでサーバサイドにデータを送信し，受け取ってきたものを表示。
+    //ajaxでサーバサイドにデータを送信し，受け取ってきたものを表示。
     if (next_q_number == Q_NUM_INF) {
       q_number = next_q_number;
       //サジェストページへの移行。ここでqueryを投げて返ってくるのを待つ。
@@ -331,22 +331,26 @@ async function nextButton(ans_num) {
         100, 100, 100, 100, 100, 100, 100, 100, 100, 40
       ];
 
+      //out_vectorの値を10桁の整数に変換しrequest_paramにする
       var request_param = 0;
       for(var i=0; i<OUTVEC_DIM; i++){
         request_param = request_param * 10 + out_vector[i];
       }
       const server_url = location.href + "search/" + request_param;
 
+      //ajaxでviews.pyのsearchにデータを送信
       const errmes = "サーバーAIとの通信に失敗しました……\n通信状況が悪いか，またはAIの調子が悪いかもしれません。\nしばらく待ってから再度お試しください。";
       $.ajax({
         url: server_url,
         type: "GET",
         dataType: 'json'
       }) 
-      .done(function(data, textStatus, jqXHR){  //data, success, 200
+      .done(function(data, textStatus, jqXHR){
+        //空のデータが返ってきたらエラー表示
         if(data.title==null){
           alert("AIが適切な献立を見つけられませんでした……！\nお役に立てず，申し訳ありません。");
         }
+        //正常なデータが返ってきたらそれを表示
         else{
           document.getElementById('recipe-title').innerText = data.title;
           //document.getElementById('recipe-img').src = menu.imageurl; //これまだ
@@ -360,6 +364,7 @@ async function nextButton(ans_num) {
           recipe_imageref.innerText = recipe_url;
         }
       }).fail(function(jqXHR, textStatus, errorThrown){
+        //データが返ってこなかったらエラーメッセージ表示
         alert(errmes);
       });
     }
