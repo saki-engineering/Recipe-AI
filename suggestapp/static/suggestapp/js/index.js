@@ -353,7 +353,7 @@ async function nextButton(ans_num) {
         //正常なデータが返ってきたらそれを表示
         else{
           document.getElementById('recipe-title').innerText = data.title;
-          //document.getElementById('recipe-img').src = menu.imageurl; //これまだ
+          document.getElementById('recipe-img').src = data.image_url;
           const recipe_url = "https://www.orangepage.net/recipes/detail_" + data.url_id;
           const recipe_ref = document.getElementById('recipe-ref');
           recipe_ref.href = recipe_url;
