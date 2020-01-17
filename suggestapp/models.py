@@ -16,3 +16,6 @@ class Recipe(models.Model):
     step   = models.SmallIntegerField(blank=False, null=False)
     calory = models.DecimalField(blank=False, null=False, max_digits=6, decimal_places=2)
     salt   = models.DecimalField(blank=False, null=False, max_digits=4, decimal_places=2)
+
+    def __str__(self):
+        return self.title
