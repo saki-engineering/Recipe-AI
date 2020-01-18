@@ -7,9 +7,9 @@ from bs4 import BeautifulSoup as bs
 MAX_DATA_SIZE = 1000
 BASE_URL = 'https://www.orangepage.net/recipes/detail_'
 
-for id in range(116900,117000):
+for id in range(115000,117000):
     #実行の進捗状況がわかるようにfor文イテレータをターミナル出力
-    if id%10 == 0:
+    if id%5 == 0:
         print(id)
 
     #指定urlにGETリクエストを送信、ステータスコードが200の場合はhtmlを取得
@@ -52,11 +52,8 @@ for id in range(116900,117000):
             if len(salt_info) > 1:
                 salt = salt/int(salt_info[1])
 
-    """
-    print(title)
-    print(step)
-    print('{:.2f}'.format(calory))
-    print('{:.2f}'.format(salt))
-    """
-    with open('create_recipe_db.sql', 'a') as f:
-        print("insert into suggestapp_recipe(title, url_id, step, calory, salt) values('{}',{},{},{:.2f},{:.2f});".format(title, id, step, calory, salt), file=f)
+    #料理画像urlを抽出
+    image_url = bsObj.find("img", itemprop="image").get("src")
+
+    with open('create_recipe_db3.sql', 'a') as f:
+        print("insert into suggestapp_recipe(title, url_id, step, calory, salt, image_url) values('{}',{},{},{:.2f},{:.2f},'{}');".format(title, id, step, calory, salt, image_url), file=f)
