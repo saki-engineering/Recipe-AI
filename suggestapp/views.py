@@ -3,8 +3,6 @@ from django.http.response import JsonResponse
 import numpy as np
 import random
 import math
-import requests
-from bs4 import BeautifulSoup as bs
 from .models import Recipe
 
 # Create your views here.
@@ -36,11 +34,5 @@ def search(request, param):
     #recipes[index]がサジェストする献立
     index = math.ceil(random.random() * len(candicates))
 
-    #画面に表示する料理画像のurlを取得
-    page_url = "https://www.orangepage.net/recipes/detail_" + str(recipes[index].url_id)
-    res = requests.get(page_url, allow_redirects=False)
-    bsObj = bs(res.text, "html.parser")
-    image_url = bsObj.find("img", itemprop="image").get("src")
-
-    ret = {"title": recipes[index].title, "url_id": recipes[index].url_id, "image_url": image_url}
+    ret = {"title": recipes[index].title, "url_id": recipes[index].url_id, "image_url": recipes[index].image_url}
     return JsonResponse(ret)
